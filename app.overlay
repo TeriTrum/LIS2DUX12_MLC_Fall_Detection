@@ -1,0 +1,36 @@
+// Dinh nghia cac chan cho i2c va tdm
+&pinctrl {
+	i2c_default: i2c_default {
+	        group1 {
+	                psels = <NRF_PSEL(TWIM_SDA, 1, 4)>,
+		                <NRF_PSEL(TWIM_SCL, 1, 3)>;
+	                bias-pull-up;
+		};
+	};
+
+	i2c_sleep: i2c_sleep {
+                group1 {
+			psels = <NRF_PSEL(TWIM_SDA, 1, 4)>,
+				<NRF_PSEL(TWIM_SCL, 1, 3)>;
+			low-power-enable;
+		};
+        };
+};
+
+&i2c24 {
+	compatible = "nordic,nrf-twim";
+	status = "okay";
+	clock-frequency = <I2C_BITRATE_STANDARD>;
+	pinctrl-0 = <&i2c_default>;
+	pinctrl-1 = <&i2c_sleep>;
+	pinctrl-names = "default", "sleep";
+
+	lis2dux12: lis2dux12@18 {
+		compatible = "i2c-device";
+		reg = <0x18>;
+	};
+};
+
+&gpio3 {
+	status = "okay";
+};
